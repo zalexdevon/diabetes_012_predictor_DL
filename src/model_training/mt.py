@@ -15,11 +15,6 @@ def load_data(data_transformation_path):
     return train_ds, val_ds, num_features
 
 
-def save_models_before_training(model_training_path, model_indices, models):
-    for model_index, model in zip(model_indices, models):
-        myfuncs.save_python_object(
-            os.path.join(model_training_path, f"{model_index}.pkl"), model
-        )
 
 
 def create_model_from_layers(model, num_features):
