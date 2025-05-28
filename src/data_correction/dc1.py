@@ -16,35 +16,30 @@ class BeforeTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None):
         df = X
 
-        # Xóa các cột không cần thiết
-        df = df.drop(
-            columns=[
-                "taken_time",
-            ]
-        )
-
         #  Đổi tên cột
         rename_dict = {
-            "pH": "pH_num",
-            "Iron": "Iron_num",
-            "Nitrate": "Nitrate_num",
-            "Chloride": "Chloride_num",
-            "Lead": "Lead_num",
-            "Zinc": "Zinc_num",
-            "Color": "Color_ord",
-            "Turbidity": "Turbidity_num",
-            "Fluoride": "Fluoride_num",
-            "Copper": "Copper_num",
-            "Odor": "Odor_num",
-            "Sulfate": "Sulfate_num",
-            "Conductivity": "Conductivity_num",
-            "Chlorine": "Chlorine_num",
-            "Manganese": "Manganese_num",
-            "Total Dissolved Solids": "Total_Dissolved_Solids_num",
-            "Source": "Source_nom",
-            "Water Temperature": "Water_Temperature_num",
-            "Air Temperature": "Air_Temperature_num",
-            "Target": "Target_target",
+            "Diabetes_012": "Diabetes_012_target",
+            "HighBP": "HighBP_bin",
+            "HighChol": "HighChol_bin",
+            "CholCheck": "CholCheck_bin",
+            "BMI": "BMI_num",
+            "Smoker": "Smoker_bin",
+            "Stroke": "Stroke_bin",
+            "HeartDiseaseorAttack": "HeartDiseaseorAttack_bin",
+            "PhysActivity": "PhysActivity_bin",
+            "Fruits": "Fruits_bin",
+            "Veggies": "Veggies_bin",
+            "HvyAlcoholConsump": "HvyAlcoholConsump_bin",
+            "AnyHealthcare": "AnyHealthcare_bin",
+            "NoDocbcCost": "NoDocbcCost_bin",
+            "GenHlth": "GenHlth_ord",
+            "MentHlth": "MentHlthr_numcat",
+            "PhysHlth": "PhysHlth_numcat",
+            "DiffWalk": "DiffWalk_bin",
+            "Sex": "Sex_nom",
+            "Age": "Age_nom",
+            "Education": "Education_ord",
+            "Income": "Income_ord",
         }
 
         df = df.rename(columns=rename_dict)
@@ -68,6 +63,55 @@ class BeforeTransformer(BaseEstimator, TransformerMixin):
             + ordinal_cols
             + [target_col]
         ]
+
+        # Chuyển kdl = kdl mong muốn + NAN
+        ## Sex_nom
+        col_name = "Sex_nom"
+        df[col_name] = df[col_name].astype("int").astype("str")
+        df[col_name] = myfuncs.replace_in_category_series_33(
+            df[col_name],
+            [
+                (["0"], "female"),
+                (["1"], "male"),
+            ],
+        )
+
+        ## Age_nom
+        col_name = "Age_nom"
+        df[col_name] = df[col_name].astype("int").astype("str")
+
+        ## GenHlth_ord
+        col_name = "GenHlth_ord"
+        df[col_name] = df[col_name].astype("int").astype("str")
+        df[col_name] = myfuncs.replace_in_category_series_33(
+            df[col_name],
+            [
+                (["1"], "excellent"),
+                (["2"], "very_good"),
+                (["3"], "good"),
+                (["4"], "fair"),
+                (["5"], "poor"),
+            ],
+        )
+
+        ## Education_ord
+        col_name = "Education_ord"
+        df[col_name] = df[col_name].astype("int").astype("str")
+        df[col_name] = myfuncs.replace_in_category_series_33(
+            df[col_name],
+            [
+                (["1"], "never_attend_school_or_only_kindergarten"),
+                (["2"], "elementary"),
+                (["3"], "high_school"),
+                (["4"], "high_school_graduate"),
+                (["5"], "college"),
+                (["6"], "college_graduate"),
+            ],
+        )
+
+        ## Income_ord
+        col_name = "Income_ord"
+        df[col_name] = df[col_name].astype("int").astype("str")
 
         return df
 
