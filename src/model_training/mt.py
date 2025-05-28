@@ -101,7 +101,7 @@ def train_and_save_models(
             callbacks=model_callbacks,
         ).history
         training_time = time.time() - start_time
-        num_epochs_before_stopping = f"{len(history.history["loss"])}/ {epochs}" # Số epoch trước khi dừng train model 
+        num_epochs_before_stopping = f"{len(history["loss"])} | {epochs}" # Số epoch trước khi dừng train model 
         train_scoring, val_scoring = myfuncs.load_python_object(f"{model_folder_path}/scoring.pkl")
         os.remove(f"{model_folder_path}/scoring.pkl") # Không cần thiết nữa 
 
