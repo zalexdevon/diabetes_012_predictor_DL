@@ -96,13 +96,7 @@ def do_transform_data_in_data_transformation(
         target_transformer.fit_transform(df_train).values.reshape(-1).astype("int8")
     )
 
-    # TODO: d
-    print("START error không fit")
-    # d
     df_val_corrected = correction_transformer.transform(df_val)
-    # TODO: d
-    print("END error không fit")
-    # d
 
     df_val_feature = feature_transformer.transform(df_val_corrected).astype("float32")
     df_val_target = (

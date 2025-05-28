@@ -113,6 +113,7 @@ class BeforeTransformer(BaseEstimator, TransformerMixin):
         col_name = "Income_ord"
         df[col_name] = df[col_name].astype("int").astype("str")
 
+        self.cols = df.columns.tolist()
         return df
 
     def fit_transform(self, X, y=None):
@@ -148,6 +149,8 @@ class MissingValueHandler(BaseEstimator, TransformerMixin):
         )
         self.handler.fit(df)
 
+        return self
+
     def transform(self, X, y=None):
         df = X
 
@@ -156,9 +159,11 @@ class MissingValueHandler(BaseEstimator, TransformerMixin):
         )
 
         df = self.handler.transform(df)
-        self.cols = numeric_cols + numericCat_cols + cat_cols + [target_col]
-        df = pd.DataFrame(df, columns=self.cols)
+        df = pd.DataFrame(
+            df, columns=numeric_cols + numericCat_cols + cat_cols + [target_col]
+        )
 
+        self.cols = df.columns.tolist()
         return df
 
     def fit_transform(self, X, y=None):
@@ -179,8 +184,6 @@ class AfterTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None):
         df = X
 
-        self.cols = df.columns.tolist()
-
         numeric_cols, numericCat_cols, cat_cols, _, _, _, target_col = (
             myfuncs.get_different_types_cols_from_df_4(df)
         )
@@ -194,6 +197,7 @@ class AfterTransformer(BaseEstimator, TransformerMixin):
         # Loại bỏ duplicates
         df = df.drop_duplicates().reset_index(drop=True)
 
+        self.cols = df.columns.tolist()
         return df
 
     def fit_transform(self, X, y=None):
