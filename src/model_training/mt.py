@@ -67,7 +67,7 @@ def train_and_save_models(
     for model_index, model in zip(model_indices, models):
         # Tạo folder cho model
         model_folder_path = f"{model_training_path}/{model_index}"
-        myfuncs.create_directories_on_colab(model_folder_path)
+        myfuncs.create_directories_on_colab([model_folder_path])
 
         # Create model
         model = create_model_from_layers(model, num_features)
