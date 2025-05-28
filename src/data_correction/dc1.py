@@ -11,6 +11,7 @@ class BeforeTransformer(BaseEstimator, TransformerMixin):
         super().__init__()
 
     def fit(self, X, y=None):
+        self.is_fitted_ = True
         return self
 
     def transform(self, X, y=None):
@@ -150,9 +151,10 @@ class MissingValueHandler(BaseEstimator, TransformerMixin):
         self.handler.fit(df)
 
         # TODO: d
-        print("Chỗ này thêm return self rồi mà")
+        print("Chỗ này thêm return self rồi mà + self.is_fitted_ = True rồi mà")
         # d
 
+        self.is_fitted_ = True
         return self
 
     def transform(self, X, y=None):
@@ -183,6 +185,7 @@ class AfterTransformer(BaseEstimator, TransformerMixin):
         super().__init__()
 
     def fit(self, X, y=None):
+        self.is_fitted_ = True
         return self
 
     def transform(self, X, y=None):
