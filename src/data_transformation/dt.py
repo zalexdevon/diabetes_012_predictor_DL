@@ -2,9 +2,7 @@ from Mylib import myfuncs, stringToObjectConverter, myclasses, tf_myfuncs
 import os
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import (
-    OrdinalEncoder,
-)
+from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler
 import tensorflow as tf
 
 
@@ -68,6 +66,7 @@ def create_data_transformation_transformer(
                 myclasses.DuringFeatureTransformer(feature_ordinal_dict),
             ),
             ("after", after_feature_pipeline),
+            ("final_scale", MinMaxScaler()),
         ]
     )
     feature_transformer = myclasses.NamedColumnTransformer(
