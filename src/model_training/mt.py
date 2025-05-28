@@ -15,8 +15,6 @@ def load_data(data_transformation_path):
     return train_ds, val_ds, num_features
 
 
-
-
 def create_model_from_layers(model, num_features):
     input_layer = tf.keras.Input(shape=(num_features,))  # Tạo sẵn layer Input trước
     x = input_layer
@@ -60,14 +58,14 @@ def train_and_save_models(
     optimizer,
     loss,
     val_scoring_limit_to_save_model,
-    num_features
+    num_features,
 ):
     tf.config.run_functions_eagerly(True)  # Bật eager execution
     tf.data.experimental.enable_debug_mode()  # Bật chế độ eager cho tf.data
 
     logging_message = ""
-    for model_index, model in zip(model_indices, models) :
-        # Tạo folder cho model 
+    for model_index, model in zip(model_indices, models):
+        # Tạo folder cho model
         model_folder_path = f"{model_training_path}/{model_index}"
         myfuncs.create_directories_on_colab(model_folder_path)
 
@@ -101,21 +99,31 @@ def train_and_save_models(
             callbacks=model_callbacks,
         ).history
         training_time = time.time() - start_time
-        num_epochs_before_stopping = f"{len(history["loss"])} | {epochs}" # Số epoch trước khi dừng train model 
-        train_scoring, val_scoring = myfuncs.load_python_object(f"{model_folder_path}/scoring.pkl")
-        os.remove(f"{model_folder_path}/scoring.pkl") # Không cần thiết nữa 
+        num_epochs_before_stopping = (
+            f"{len(history['loss'])} / {epochs}"  # Số epoch trước khi dừng train model
+        )
+        train_scoring, val_scoring = myfuncs.load_python_object(
+            f"{model_folder_path}/scoring.pkl"
+        )
+        os.remove(f"{model_folder_path}/scoring.pkl")  # Không cần thiết nữa
 
         # In kết quả
         training_result_text = f"Model {full_model_index}\n -> Train {scoring}: {train_scoring}, Val {scoring}: {val_scoring}, Time: {training_time} (s), Epochs: {num_epochs_before_stopping}\n"
         print(training_result_text)
 
-        # Logging 
+        # Logging
         logging_message += training_result_text
 
         # Lưu kết quả train model
         myfuncs.save_python_object(
             f"{model_folder_path}/result.pkl",
-            (full_model_index, train_scoring, val_scoring, training_time, num_epochs_before_stopping),
+            (
+                full_model_index,
+                train_scoring,
+                val_scoring,
+                training_time,
+                num_epochs_before_stopping,
+            ),
         )
-    
+
     return logging_message
